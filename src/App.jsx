@@ -237,11 +237,17 @@ const HomePage = ({ config, projects, reels, aiVideos, services, setSelectedReel
     <section style={{padding:"120px 0 80px"}}>
       <div style={{padding:"0 60px",marginBottom:60,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
         <div><Reveal><Label>Selected Work</Label></Reveal><Reveal delay={0.1}><h2 style={{fontSize:"clamp(32px,5vw,60px)",fontWeight:200,letterSpacing:"-0.03em",margin:"12px 0 0"}}>Featured Projects</h2></Reveal></div>
-        <Fade delay={0.3}><span style={{fontSize:12,color:"rgba(255,255,255,0.3)",fontFamily:mono}}>Drag to explore →</span></Fade>
+        <div style={{display:"flex",gap:16,alignItems:"center"}}>
+          <Fade delay={0.3}><span style={{fontSize:12,color:"rgba(255,255,255,0.3)",fontFamily:mono}}>Drag to explore</span></Fade>
+          <Fade delay={0.4}><div style={{display:"flex",gap:8}}>
+            <button data-hover onClick={()=>{const el=scrollRef.current;if(el)el.scrollBy({left:-550,behavior:"smooth"})}} style={{width:40,height:40,borderRadius:"50%",border:"1px solid rgba(255,255,255,0.15)",background:"transparent",color:"#fff",fontSize:16,cursor:"none",display:"flex",alignItems:"center",justifyContent:"center",transition:"border-color .3s"}} onMouseEnter={e=>e.target.style.borderColor="rgba(255,255,255,0.5)"} onMouseLeave={e=>e.target.style.borderColor="rgba(255,255,255,0.15)"}>←</button>
+            <button data-hover onClick={()=>{const el=scrollRef.current;if(el)el.scrollBy({left:550,behavior:"smooth"})}} style={{width:40,height:40,borderRadius:"50%",border:"1px solid rgba(255,255,255,0.15)",background:"transparent",color:"#fff",fontSize:16,cursor:"none",display:"flex",alignItems:"center",justifyContent:"center",transition:"border-color .3s"}} onMouseEnter={e=>e.target.style.borderColor="rgba(255,255,255,0.5)"} onMouseLeave={e=>e.target.style.borderColor="rgba(255,255,255,0.15)"}>→</button>
+          </div></Fade>
+        </div>
       </div>
       <div style={{position:"relative"}}>
-        <div ref={scrollRef} onScroll={hs} style={{display:"flex",gap:30,overflowX:"auto",padding:"40px 60px 60px",scrollSnapType:"x mandatory",scrollbarWidth:"none"}}>
-          <style>{`div::-webkit-scrollbar{display:none}`}</style>
+        <style>{`.p11-scroll::-webkit-scrollbar{display:none}`}</style>
+        <div ref={scrollRef} className="p11-scroll" onScroll={hs} style={{display:"flex",gap:30,overflowX:"auto",padding:"40px 60px 60px",scrollSnapType:"x mandatory",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
           {projects.map(p=>(
             <div key={p.id} data-hover onClick={()=>navigate(`/project/${p.id}`)} style={{flex:"0 0 min(520px,75vw)",scrollSnapAlign:"center",cursor:"none",borderRadius:4,overflow:"hidden"}}>
               <div style={{aspectRatio:"16/10",background:`linear-gradient(135deg,${p.color}22 0%,#0a0a0a 60%,${p.color}11 100%)`,position:"relative"}}>
