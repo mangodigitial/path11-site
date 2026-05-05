@@ -11,16 +11,6 @@ export default function WorkGrid({ projects }: Props) {
 
   if (projects.length === 0) return null;
 
-  // Rough layout pattern that works for any count of projects:
-  // first gets full-width, then alternate tall+wide rows
-  const rows: Project[][] = [];
-  let rest = [...projects];
-  if (rest.length) rows.push([rest.shift()!]);
-  while (rest.length >= 2) {
-    rows.push([rest.shift()!, rest.shift()!]);
-  }
-  if (rest.length) rows.push([rest.shift()!]);
-
   const openLightbox = (project: Project) => {
     const items = galleryFor(project);
     if (items.length === 0) return;
@@ -41,23 +31,9 @@ export default function WorkGrid({ projects }: Props) {
         </div>
 
         <div className="space-y-5">
-          {rows.map((row, i) => {
-            if (row.length === 1) {
-              return <ProjectCard key={row[0].id} project={row[0]} aspectClass="aspect-[21/9]" onOpen={openLightbox} />;
-            }
-            const reverse = i % 2 === 0;
-            return (
-              <div key={i} className={`grid grid-cols-1 md:grid-cols-[${reverse ? '1fr_2fr' : '2fr_1fr'}] gap-5`}
-                   style={{ gridTemplateColumns: typeof window === 'undefined'
-                     ? undefined
-                     : undefined }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:col-span-1" style={{ display: 'contents' }}>
-                  <ProjectCard project={row[0]} aspectClass={reverse ? 'aspect-[4/5]' : 'aspect-[16/10]'} onOpen={openLightbox} />
-                  <ProjectCard project={row[1]} aspectClass={reverse ? 'aspect-[16/10]' : 'aspect-[4/5]'} onOpen={openLightbox} />
-                </div>
-              </div>
-            );
-          })}
+          {projects.map((p) => (
+            <ProjectCard key={p.id} project={p} aspectClass="aspect-[21/9]" onOpen={openLightbox} />
+          ))}
         </div>
       </div>
 
