@@ -94,7 +94,18 @@ function ProjectCard({
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80" />
 
-      <div className="absolute bottom-6 left-6 right-6 z-10 flex justify-between items-end text-white">
+      {project.client_logo_url && (
+        <div className="absolute inset-0 grid place-items-center z-10 pointer-events-none">
+          <img
+            src={project.client_logo_url}
+            alt={`${project.title} logo`}
+            className="max-w-[40%] max-h-[30%] w-auto h-auto object-contain transition-opacity duration-700 ease-[cubic-bezier(.2,.8,.2,1)] opacity-90 group-hover:opacity-0"
+            style={{ filter: 'drop-shadow(0 2px 12px rgba(0,0,0,0.4))' }}
+          />
+        </div>
+      )}
+
+      <div className="absolute bottom-6 left-6 right-6 z-10 flex justify-between items-end text-white transition-transform duration-700 ease-[cubic-bezier(.2,.8,.2,1)] translate-y-1 group-hover:translate-y-0">
         <div>
           <div className="font-display text-[11px] tracking-[0.02em] text-white/60 mb-2">
             {[project.year, project.location].filter(Boolean).join(' / ')}

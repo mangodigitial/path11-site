@@ -37,6 +37,7 @@ export type Project = {
   video_url: string | null;
   video_type: 'vimeo' | 'mp4' | null;
   media: ProjectMedia[];
+  client_logo_url: string | null;
   description: string | null;
   size: 'hero' | 'tall' | 'wide' | 'square';
   published: boolean;

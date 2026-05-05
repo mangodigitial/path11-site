@@ -180,3 +180,9 @@ insert into team (order_index, name, role, bio, is_founder) values
   (2, 'Suki Tanaka',  'Director of Photography', 'Award-winning DP with a feature-film background. Specialist in natural light and architectural storytelling.', false),
   (3, 'James Osei',   'Head of Post & Web',      'Colourist, editor, and web build lead. Previously at MPC and Framestore. Obsessive about every frame and every millisecond of page load.', false),
   (4, 'Lena Vogt',    'Head of Digital',         'Runs social, paid, and CRM. Background in performance marketing for luxury hospitality groups across Europe and the Middle East.', false);
+
+-- ── Migration: client logos ──
+-- Adds a nullable column for an SVG/PNG client logo rendered centred over each
+-- project card on the home page. Run this against the live database — existing
+-- rows are unaffected because the column is nullable.
+alter table projects add column if not exists client_logo_url text;

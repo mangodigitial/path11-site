@@ -569,6 +569,7 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
         video_url: row.video_url,
         video_type: row.video_type,
         media: row.media ?? [],
+        client_logo_url: row.client_logo_url,
         description: row.description,
         size: row.size,
         published: row.published,
@@ -600,6 +601,7 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
       video_url: null,
       video_type: null,
       media: [],
+      client_logo_url: null,
       description: '',
       size: 'wide',
       published: true,
@@ -640,6 +642,11 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
 
           <Field label="Thumbnail image (cover shown on the Work card)">
             <ImageUpload value={row.image_url} folder="projects" onChange={url => update(row.id, { image_url: url })} />
+          </Field>
+
+          {/* SVG preferred — transparent PNG also works. JPG won't render correctly without a background. */}
+          <Field label="Client logo (SVG, centred over card)">
+            <ImageUpload value={row.client_logo_url} folder="logos" onChange={url => update(row.id, { client_logo_url: url })} />
           </Field>
 
           <Field label="Gallery (shown in the lightbox when the card is clicked — add as many images and videos as you like)">
