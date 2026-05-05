@@ -24,7 +24,7 @@ export default function HomeClient({ content }: { content: SiteContent }) {
     <main>
       <TopBar current={Math.max(1, safe + 1)} total={Math.max(1, takes.length)} onAdvance={() => setIdx(i => i + 1)} />
       <Hero tiles={tiles} />
-      <Tagline services={content.services} config={content.config} />
+      <Tagline config={content.config} />
       <WorkGrid projects={content.projects} />
       <Services services={content.services} />
       <Team team={content.team} founder={content.founder} config={content.config} />
