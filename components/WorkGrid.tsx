@@ -1,8 +1,14 @@
-import { type Project } from '@/lib/content';
+'use client';
+
+import { useState } from 'react';
+import { type Project, type ProjectMedia } from '@/lib/content';
+import Lightbox from './Lightbox';
 
 type Props = { projects: Project[] };
 
 export default function WorkGrid({ projects }: Props) {
+  const [open, setOpen] = useState<{ project: Project; index: number } | null>(null);
+
   if (projects.length === 0) return null;
 
   // Rough layout pattern that works for any count of projects:
@@ -14,6 +20,12 @@ export default function WorkGrid({ projects }: Props) {
     rows.push([rest.shift()!, rest.shift()!]);
   }
   if (rest.length) rows.push([rest.shift()!]);
+
+  const openLightbox = (project: Project) => {
+    const items = galleryFor(project);
+    if (items.length === 0) return;
+    setOpen({ project, index: 0 });
+  };
 
   return (
     <section id="work" className="px-6 md:px-10 pb-24 md:pb-36">
@@ -31,9 +43,8 @@ export default function WorkGrid({ projects }: Props) {
         <div className="space-y-5">
           {rows.map((row, i) => {
             if (row.length === 1) {
-              return <ProjectCard key={row[0].id} project={row[0]} aspectClass="aspect-[21/9]" />;
+              return <ProjectCard key={row[0].id} project={row[0]} aspectClass="aspect-[21/9]" onOpen={openLightbox} />;
             }
-            // Alternate [1fr,2fr] and [2fr,1fr] per row for editorial rhythm
             const reverse = i % 2 === 0;
             return (
               <div key={i} className={`grid grid-cols-1 md:grid-cols-[${reverse ? '1fr_2fr' : '2fr_1fr'}] gap-5`}
@@ -41,22 +52,59 @@ export default function WorkGrid({ projects }: Props) {
                      ? undefined
                      : undefined }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:col-span-1" style={{ display: 'contents' }}>
-                  <ProjectCard project={row[0]} aspectClass={reverse ? 'aspect-[4/5]' : 'aspect-[16/10]'} />
-                  <ProjectCard project={row[1]} aspectClass={reverse ? 'aspect-[16/10]' : 'aspect-[4/5]'} />
+                  <ProjectCard project={row[0]} aspectClass={reverse ? 'aspect-[4/5]' : 'aspect-[16/10]'} onOpen={openLightbox} />
+                  <ProjectCard project={row[1]} aspectClass={reverse ? 'aspect-[16/10]' : 'aspect-[4/5]'} onOpen={openLightbox} />
                 </div>
               </div>
             );
           })}
         </div>
       </div>
+
+      {open && (
+        <Lightbox
+          items={galleryFor(open.project)}
+          startIndex={open.index}
+          title={open.project.title}
+          onClose={() => setOpen(null)}
+        />
+      )}
     </section>
   );
 }
 
-function ProjectCard({ project, aspectClass }: { project: Project; aspectClass: string }) {
+// Build a gallery for the lightbox. Prefer the project.media array; fall back
+// to legacy single video_url + image_url so older rows still play something.
+function galleryFor(p: Project): ProjectMedia[] {
+  if (p.media && p.media.length > 0) return p.media;
+
+  const items: ProjectMedia[] = [];
+  if (p.video_url && p.video_type) {
+    items.push({ kind: p.video_type, url: p.video_url });
+  }
+  if (p.image_url) {
+    items.push({ kind: 'image', url: p.image_url });
+  }
+  return items;
+}
+
+function ProjectCard({
+  project,
+  aspectClass,
+  onOpen,
+}: {
+  project: Project;
+  aspectClass: string;
+  onOpen: (p: Project) => void;
+}) {
+  const hasGallery = galleryFor(project).length > 0;
+
   return (
-    <a href={`#project-${project.slug}`}
-       className={`relative block overflow-hidden group cursor-pointer ${aspectClass}`}>
+    <button
+      type="button"
+      onClick={() => hasGallery && onOpen(project)}
+      className={`relative block overflow-hidden group text-left w-full ${aspectClass} ${hasGallery ? 'cursor-pointer' : 'cursor-default'}`}
+    >
       {/* Media */}
       {project.image_url ? (
         <img src={project.image_url} alt={project.title}
@@ -96,6 +144,6 @@ function ProjectCard({ project, aspectClass }: { project: Project; aspectClass: 
           {project.category}
         </div>
       )}
-    </a>
+    </button>
   );
 }

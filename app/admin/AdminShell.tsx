@@ -5,6 +5,7 @@ import {
   type HeroTake,
   type HeroTile,
   type Project,
+  type ProjectMedia,
   type Service,
   type TeamMember,
   type Config,
@@ -326,6 +327,87 @@ function VideoInput({
   );
 }
 
+// ─── Media gallery — mixed images + videos, reorderable ─────
+
+function MediaGalleryField({
+  items,
+  onChange,
+}: {
+  items: ProjectMedia[];
+  onChange: (items: ProjectMedia[]) => void;
+}) {
+  const update = (i: number, patch: Partial<ProjectMedia>) => {
+    onChange(items.map((it, j) => j === i ? { ...it, ...patch } : it));
+  };
+  const remove = (i: number) => onChange(items.filter((_, j) => j !== i));
+  const move = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    const next = [...items];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+  const addImage = () => onChange([...items, { kind: 'image', url: '' }]);
+  const addVideo = () => onChange([...items, { kind: 'vimeo', url: '' }]);
+
+  return (
+    <div className="space-y-3">
+      {items.length === 0 && (
+        <div className="text-[12px] text-white/40 italic">
+          No gallery items yet. Add images and videos that will play in the lightbox.
+        </div>
+      )}
+
+      {items.map((item, i) => (
+        <div key={i} className="border border-white/10 bg-white/[0.02] p-3 space-y-2">
+          <div className="flex items-center justify-between text-[11px] text-white/50">
+            <span>{String(i + 1).padStart(2, '0')} · {item.kind === 'image' ? 'Image' : item.kind === 'vimeo' ? 'Vimeo' : 'MP4 video'}</span>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
+                className="px-2 hover:text-white disabled:opacity-30">↑</button>
+              <button type="button" onClick={() => move(i, +1)} disabled={i === items.length - 1}
+                className="px-2 hover:text-white disabled:opacity-30">↓</button>
+              <button type="button" onClick={() => remove(i)}
+                className="px-2 hover:text-[#C9A961]">×</button>
+            </div>
+          </div>
+
+          {item.kind === 'image' ? (
+            <ImageUpload
+              value={item.url || null}
+              folder="projects"
+              onChange={url => update(i, { url: url || '' })}
+            />
+          ) : (
+            <VideoInput
+              urlValue={item.url}
+              typeValue={item.kind}
+              onChange={(url, type) => update(i, { url: url || '', kind: type ?? 'vimeo' })}
+            />
+          )}
+        </div>
+      ))}
+
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={addImage}
+          className="text-[12px] px-3 py-1.5 border border-white/15 hover:border-white/40 text-white/70 hover:text-white transition-colors"
+        >
+          + Add image
+        </button>
+        <button
+          type="button"
+          onClick={addVideo}
+          className="text-[12px] px-3 py-1.5 border border-white/15 hover:border-white/40 text-white/70 hover:text-white transition-colors"
+        >
+          + Add video
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════
 // HERO TAKES EDITOR
 // ═══════════════════════════════════════════════════════════
@@ -486,6 +568,7 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
         image_url: row.image_url,
         video_url: row.video_url,
         video_type: row.video_type,
+        media: row.media ?? [],
         description: row.description,
         size: row.size,
         published: row.published,
@@ -516,6 +599,7 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
       image_url: null,
       video_url: null,
       video_type: null,
+      media: [],
       description: '',
       size: 'wide',
       published: true,
@@ -554,18 +638,16 @@ function ProjectsEditor({ initial }: { initial: Project[] }) {
             <Textarea rows={3} value={row.description || ''} onChange={v => update(row.id, { description: v })} />
           </Field>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Thumbnail image">
-              <ImageUpload value={row.image_url} folder="projects" onChange={url => update(row.id, { image_url: url })} />
-            </Field>
-            <Field label="Video (Vimeo or MP4)">
-              <VideoInput
-                urlValue={row.video_url}
-                typeValue={row.video_type}
-                onChange={(url, type) => update(row.id, { video_url: url, video_type: type })}
-              />
-            </Field>
-          </div>
+          <Field label="Thumbnail image (cover shown on the Work card)">
+            <ImageUpload value={row.image_url} folder="projects" onChange={url => update(row.id, { image_url: url })} />
+          </Field>
+
+          <Field label="Gallery (shown in the lightbox when the card is clicked — add as many images and videos as you like)">
+            <MediaGalleryField
+              items={row.media ?? []}
+              onChange={items => update(row.id, { media: items })}
+            />
+          </Field>
 
           <div className="flex gap-3 mt-4 pt-4 border-t border-white/5">
             <SaveButton onClick={() => save(row)} pending={pending} />

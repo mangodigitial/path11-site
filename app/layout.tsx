@@ -26,7 +26,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'Path 11 — Cinema for the world\'s most inspired places',
-  description: 'Path 11 is a production studio crafting cinematic films for luxury hotels, resorts, and real estate. London · Dubai · New York · Sydney.',
+  description: 'Path 11 is a production studio crafting cinematic films for luxury hotels, resorts, and real estate.',
   openGraph: {
     title: 'Path 11',
     description: 'Cinema for the world\'s most inspired places.',

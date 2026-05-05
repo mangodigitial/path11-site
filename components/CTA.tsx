@@ -28,8 +28,6 @@ export default function CTA({ config }: Props) {
 
         <div className="mt-12 font-display text-[13px] tracking-[0.02em] text-cream-muted">
           {config.email}
-          <span className="mx-3 text-cream/20">/</span>
-          {config.studios.join(' / ')}
         </div>
       </div>
     </section>

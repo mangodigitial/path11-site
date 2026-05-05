@@ -12,8 +12,6 @@ export default function Tagline({ services, config }: Props) {
         <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-12 font-display text-[11px] tracking-[0.02em] text-cream-muted">
           <span>No. 011</span>
           <span className="w-6 h-px bg-cream/20" />
-          <span>{config.studios.join(' / ')}</span>
-          <span className="w-6 h-px bg-cream/20" />
           <span>Est. 2024</span>
         </div>
 

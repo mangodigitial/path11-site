@@ -19,6 +19,11 @@ export type HeroTake = {
   published: boolean;
 };
 
+export type ProjectMedia = {
+  kind: 'image' | 'vimeo' | 'mp4';
+  url: string;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -31,6 +36,7 @@ export type Project = {
   image_url: string | null;
   video_url: string | null;
   video_type: 'vimeo' | 'mp4' | null;
+  media: ProjectMedia[];
   description: string | null;
   size: 'hero' | 'tall' | 'wide' | 'square';
   published: boolean;
@@ -126,12 +132,19 @@ export async function fetchSiteContent(): Promise<SiteContent> {
   return {
     heroTakes,
     heroTakesMobile,
-    projects: (projRes.data ?? []) as Project[],
+    projects: (projRes.data ?? []).map(normalizeProject),
     services: (svcRes.data ?? []) as Service[],
     team,
     founder,
     config: (cfgRes.data as Config) ?? FALLBACK_CONFIG,
   };
+}
+
+function normalizeProject(r: any): Project {
+  return {
+    ...r,
+    media: Array.isArray(r.media) ? (r.media as ProjectMedia[]) : [],
+  } as Project;
 }
 
 // Admin fetcher — returns everything including unpublished
@@ -157,7 +170,7 @@ export async function fetchAllContentForAdmin(): Promise<{
       tiles: Array.isArray(r.tiles) ? (r.tiles as HeroTile[]) : [],
       published: r.published,
     })),
-    projects: (projRes.data ?? []) as Project[],
+    projects: (projRes.data ?? []).map(normalizeProject),
     services: (svcRes.data ?? []) as Service[],
     team: (teamRes.data ?? []) as TeamMember[],
     config: (cfgRes.data as Config) ?? FALLBACK_CONFIG,

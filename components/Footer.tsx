@@ -43,14 +43,7 @@ export default function Footer({ config }: Props) {
           </div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto mt-16 pt-8 flex flex-wrap justify-between items-center gap-4 border-t border-ink/10 font-display text-[12px] tracking-[0.02em] text-ink/60">
-          <div>
-            {config.studios.map((s, i) => (
-              <span key={s}>
-                {s}{i < config.studios.length - 1 && <span className="mx-3 text-ink/30">/</span>}
-              </span>
-            ))}
-          </div>
+        <div className="max-w-[1600px] mx-auto mt-16 pt-8 flex flex-wrap justify-end items-center gap-4 border-t border-ink/10 font-display text-[12px] tracking-[0.02em] text-ink/60">
           <div>{config.email}</div>
         </div>
       </div>

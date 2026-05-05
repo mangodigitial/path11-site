@@ -43,12 +43,17 @@ create table projects (
   image_url    text,
   video_url    text,
   video_type   text,                     -- 'vimeo' | 'mp4' | null
+  media        jsonb not null default '[]'::jsonb,
+  -- Each gallery item: { kind: 'image' | 'vimeo' | 'mp4', url: string }
   description  text,
   size         text not null default 'wide', -- 'hero' | 'tall' | 'wide' | 'square'
   published    boolean not null default true,
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
+
+-- If you already ran the schema before the `media` column was added, run:
+--   alter table projects add column if not exists media jsonb not null default '[]'::jsonb;
 
 -- ─── Services ────────────────────────────────────────────────
 create table services (
