@@ -41,16 +41,12 @@ export default function Hero({ tiles }: Props) {
         ))}
       </div>
 
-      {/* Logotype — backlit glass panel */}
-      <div className="absolute inset-x-0 top-0 z-10 px-5 pointer-events-none flex justify-center translate-y-[60px]">
-        <div
-          className="animate-fade-up w-fit bg-cream/[0.06] backdrop-blur-[20px] border border-brass/[0.25] px-[clamp(20px,5vw,32px)] py-[clamp(12px,2vw,20px)] sm:px-[clamp(32px,5vw,80px)] sm:py-[clamp(16px,2vw,32px)]"
-        >
-          <h1 className="text-center text-cream select-none font-display"
-              style={{ fontSize: 'clamp(72px, 18vw, 340px)', lineHeight: 0.85, letterSpacing: '-0.045em' }}>
-            <span className="font-black">PATH</span> <span className="font-thin">11</span>
-          </h1>
-        </div>
+      {/* Logotype */}
+      <div className="absolute inset-x-0 top-0 z-10 px-5 pointer-events-none" style={{ mixBlendMode: 'difference' }}>
+        <h1 className="text-center text-white select-none font-display"
+            style={{ fontSize: 'clamp(72px, 18vw, 340px)', lineHeight: 0.85, letterSpacing: '-0.045em', transform: 'translateY(60px)' }}>
+          <span className="font-black">PATH</span> <span className="font-thin">11</span>
+        </h1>
       </div>
 
       <div className="absolute left-6 md:left-10 right-6 md:right-10 bottom-6 md:bottom-7 z-[5] flex justify-end items-end text-white/60">
