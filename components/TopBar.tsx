@@ -37,15 +37,15 @@ export default function TopBar({ current, total, onAdvance }: Props) {
           Start a project
         </a>
         <button onClick={onAdvance}
-                className="flex items-center gap-2 font-display font-medium text-[13px] tracking-[0.01em] text-white/80 hover:text-white transition-colors group"
+                className="flex items-center gap-2.5 font-display font-medium text-[13px] md:text-[14px] tracking-[0.01em] text-white border border-white/60 hover:border-white hover:bg-white/10 px-3.5 py-2 rounded-full transition-colors group"
                 aria-label={`Advance to next take. Currently take ${cur} of ${tot}.`}>
-          <span>Take</span>
-          <span className="tabular-nums text-white/60 group-hover:text-white transition-colors">{cur}/{tot}</span>
-          <svg width="16" height="10" viewBox="0 0 16 10" fill="none"
+          <span>Next take</span>
+          <span className="tabular-nums text-white/70 group-hover:text-white transition-colors">{cur}/{tot}</span>
+          <svg width="18" height="11" viewBox="0 0 16 10" fill="none"
                className="transition-transform duration-400 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:translate-x-1" aria-hidden>
-            <path d="M1 5 h9 M7 2 l3 3 l-3 3" stroke="currentColor" strokeWidth="1" fill="none" />
-            <line x1="13" y1="0" x2="13" y2="10" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-            <line x1="15" y1="0" x2="15" y2="10" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+            <path d="M1 5 h9 M7 2 l3 3 l-3 3" stroke="currentColor" strokeWidth="1.4" fill="none" />
+            <line x1="13" y1="0" x2="13" y2="10" stroke="currentColor" strokeWidth="1.4" opacity="0.6" />
+            <line x1="15" y1="0" x2="15" y2="10" stroke="currentColor" strokeWidth="1.4" opacity="0.35" />
           </svg>
         </button>
       </div>
